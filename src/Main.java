@@ -1,45 +1,46 @@
-// Demonstrate a method reference to an instance method 
+// Demonstrate a method reference to a generic method
+// declared inside a non-generic class.
 
-// A functional interface for string operations. 
-interface StringFunc {
-    String func(String n);
+// A functional interface that operates on an array
+// and a value, and returns an int result.
+interface MyFunc<T> {
+    int func(T[] vals, T v);
 }
 
-// Now, this class defines an instance method called strReverse(). 
-class MyStringOps {
-    String strReverse(String str) {
-        String result = "";
-        int i;
+// This class defines a method called countMatching() that
+// returns the number of items in an array that are equal
+// to a specified value. Notice that countMatching()
+// is generic, but MyArrayOps is not.
+class MyArrayOps {
+    static <T> int countMatching(T[] vals, T v) {
+        int count = 0;
 
-        for(i = str.length()-1; i >= 0; i--)
-            result += str.charAt(i);
+        for(int i=0; i < vals.length; i++)
+            if(vals[i] == v) count++;
 
-        return result;
+        return count;
     }
 }
 
 class Main {
 
-    // This method has a functional interface as the type of
-    // its first parameter. Thus, it can be passed any instance
-    // of that interface, including method references.
-    static String stringOp(StringFunc sf, String s) {
-        return sf.func(s);
+    // This method has the MyFunc functional interface as the
+    // type of its first parameter. The other two parameters
+    // receive an array and a value, both of type T.
+    static <T> int myOp(MyFunc<T> f, T[] vals, T v) {
+        return f.func(vals, v);
     }
 
     public static void main(String args[])
     {
-        String inStr = "Lambdas add power to Java";
-        String outStr;
+        Integer[] vals = { 1, 2, 3, 4, 2 ,3, 4, 4, 5 };
+        String[] strs = { "One", "Two", "Three", "Two" };
+        int count;
 
-        // Create a MyStringOps object.
-        MyStringOps strOps = new MyStringOps( );
+        count = myOp(MyArrayOps::<Integer>countMatching, vals, 4);
+        System.out.println("vals contains " + count + " 4s");
 
-        // Now, a method reference to the instance method strReverse
-        // is passed to stringOp().
-        outStr = stringOp(strOps::strReverse, inStr);
-
-        System.out.println("Original string: " + inStr);
-        System.out.println("String reversed: " + outStr);
+        count = myOp(MyArrayOps::<String>countMatching, strs, "Two");
+        System.out.println("strs contains " + count + " Twos");
     }
 }
