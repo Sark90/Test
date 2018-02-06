@@ -1,3 +1,5 @@
+package old.annotations;
+
 import java.io.Serializable;
 
 public class Flower implements Serializable {

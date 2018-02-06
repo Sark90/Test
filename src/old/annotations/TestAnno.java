@@ -1,4 +1,4 @@
-import jdk.nashorn.internal.ir.annotations.Immutable;
+package old.annotations;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
